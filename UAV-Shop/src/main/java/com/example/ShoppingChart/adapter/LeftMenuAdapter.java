@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.example.R;
 
-/**
- * Created by cheng on 16-11-10.
- */
+
 public class LeftMenuAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private ArrayList<DishMenu> mMenuList;

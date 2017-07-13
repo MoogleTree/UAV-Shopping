@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import com.example.R;
 
 
-public class MainActivity extends AppCompatActivity implements LeftMenuAdapter.onItemSelectedListener,ShopCartImp,ShopCartDialog.ShopCartDialogImp{
+public class shoppingchart_MainActivity extends AppCompatActivity implements LeftMenuAdapter.onItemSelectedListener,ShopCartImp,ShopCartDialog.ShopCartDialogImp{
     private final static String TAG = "ChooseBtn";
     private RecyclerView leftMenu;//左侧菜单栏
     private RecyclerView rightMenu;//右侧菜单栏
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements LeftMenuAdapter.o
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.shoppingchart_main);
 
         initData();
         initView();
