@@ -7,13 +7,10 @@ import android.util.JsonReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by InsZVA on 2017/7/10.
@@ -31,7 +28,7 @@ public class Session {
     private GetPaymentCallback getPaymentCallback = null;
     private CreatePaymentCallback createPaymentCallback = null;
 
-    static final private String API_ROOT = "http://10.180.177.247:2017/";
+    static final private String API_ROOT = "http://10.180.186.184:2017/";
     static final private int MSG_NO0_SDK = 0x45786145;
     static final private int MSG_LOGIN = 0;
     static final private int MSG_ITEM_LIST = 1;
@@ -40,19 +37,19 @@ public class Session {
     static final private int MSG_GET_PAYMENT = 4;
     static final private int MSG_CREATE_PAYMENT = 5;
 
-    class NotLoginException extends Exception {
+    public class NotLoginException extends Exception {
         NotLoginException() {
             super("Not yet login.");
         }
     }
 
-    class ButtonArrayException extends Exception {
+    public class ButtonArrayException extends Exception {
         ButtonArrayException() {
             super("Button Array illigal");
         }
     }
 
-    class NullItemPairsException extends Exception {
+    public class NullItemPairsException extends Exception {
         NullItemPairsException() {super("Null Item pairs!"); }
     }
 

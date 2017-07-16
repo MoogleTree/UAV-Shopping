@@ -2,9 +2,7 @@ package com.example.ShoppingChart.model;
 
 import java.util.ArrayList;
 
-/**
- * Created by cheng on 16-11-10.
- */
+
 public class DishMenu {
     private String menuName;
     private ArrayList<Dish> dishList;

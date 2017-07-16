@@ -5,14 +5,22 @@ public class Dish {
 
     private String dishName;
     private double dishPrice;
-    private int dishAmount;
-    private int dishRemain;
+    private Long dishAmount;
+    private Long dishRemain;
+    private Long dishID;
+    private String itemDescription;
+    private String itemImagine;
 
-    public Dish(String dishName,double dishPrice,int dishAmount){
+    public Dish(String dishName,double dishPrice,Long dishAmount, Long dishID
+               // String itemDescription, String itemImagine
+    ){
         this.dishName = dishName;
         this.dishPrice = dishPrice;
         this.dishAmount = dishAmount;
         this.dishRemain = dishAmount;
+        this.dishID=dishID;
+        //this.itemDescription=itemDescription;
+        //this.itemImagine=itemImagine;
     }
 
 
@@ -32,19 +40,25 @@ public class Dish {
         this.dishPrice = dishPrice;
     }
 
-    public int getDishAmount() {
+    public Long getDishAmount() {
         return dishAmount;
     }
 
-    public void setDishAmount(int dishAmount) {
+    public void setDishAmount(Long dishAmount) {
         this.dishAmount = dishAmount;
     }
 
-    public int getDishRemain() {
+    public Long getDishRemain() {
         return dishRemain;
     }
 
-    public void setDishRemain(int dishRemain) {
+    public Long getDishID() {return dishID;}
+
+    //public String getItemDescription() {return itemDescription;}
+
+   // public String getItemImagine() {return  itemImagine;}
+
+    public void setDishRemain(Long dishRemain) {
         this.dishRemain = dishRemain;
     }
 
@@ -61,6 +75,7 @@ public class Dish {
                 this.dishName.equals(((Dish)obj).dishName) &&
                 this.dishPrice ==  ((Dish)obj).dishPrice &&
                 this.dishAmount == ((Dish)obj).dishAmount &&
-                this.dishRemain == ((Dish)obj).dishRemain;
+                this.dishRemain == ((Dish)obj).dishRemain &&
+                this.dishID == ((Dish)obj).dishID;
     }
 }

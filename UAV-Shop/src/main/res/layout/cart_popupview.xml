@@ -75,6 +75,7 @@
             android:textStyle="bold"
             android:visibility="gone"
             android:layout_marginLeft="@dimen/shopping_cart_total_price_left_magrin"/>
+
     </LinearLayout>
 
     <FrameLayout

@@ -17,9 +17,7 @@ import com.example.ShoppingChart.imp.ShopCartImp;
 
 import java.util.ArrayList;
 
-/**
- * Created by cheng on 16-11-10.
- */
+
 public class RightDishAdapter extends RecyclerView.Adapter {
     private final int MENU_TYPE = 0;
     private final int DISH_TYPE = 1;
@@ -82,6 +80,8 @@ public class RightDishAdapter extends RecyclerView.Adapter {
                 dishholder.right_dish_name_tv.setText(dish.getDishName());
                 dishholder.right_dish_price_tv.setText(dish.getDishPrice()+"");
                 dishholder.right_dish_layout.setContentDescription(position+"");
+//                dishholder.itemImage.setImageResource(dish.getItemImagine());
+//                dishholder.itemDescription.setText(dish.getItemDescription());
 
                 int count = 0;
                 if(shopCart.getShoppingSingleMap().containsKey(dish)){
@@ -186,6 +186,8 @@ public class RightDishAdapter extends RecyclerView.Adapter {
         private ImageView right_dish_remove_iv;
         private ImageView right_dish_add_iv;
         private TextView right_dish_account_tv;
+        private ImageView itemImage;
+        private TextView itemDescription;
 
         public DishViewHolder(View itemView) {
             super(itemView);
@@ -195,6 +197,8 @@ public class RightDishAdapter extends RecyclerView.Adapter {
             right_dish_remove_iv = (ImageView)itemView.findViewById(R.id.right_dish_remove);
             right_dish_add_iv = (ImageView)itemView.findViewById(R.id.right_dish_add);
             right_dish_account_tv = (TextView) itemView.findViewById(R.id.right_dish_account);
+            itemImage = (ImageView) itemView.findViewById(R.id.right_dish_image);
+            //itemDescription = (TextView) itemView.findViewById(R.id.item_dish_description);
         }
 
     }

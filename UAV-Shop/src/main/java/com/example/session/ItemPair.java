@@ -7,4 +7,14 @@ package com.example.session;
 public class ItemPair {
     public Long itemId;
     public Long itemNum;
+
+    public ItemPair(Long itemId, Long itemNum){
+        this.itemId=itemId;
+        this.itemNum=itemNum;
+    }
+
+    public ItemPair(){
+        this.itemId = 0L;
+        this.itemNum= 0L;
+    }
 }
