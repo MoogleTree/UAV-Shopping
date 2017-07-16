@@ -1,4 +1,4 @@
-package com.inszva.no0sdk;
+package com.example.session;
 
 /**
  * Created by InsZVA on 2017/7/10.

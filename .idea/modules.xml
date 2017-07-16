@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/UAV-Shop/UAV-Shop.iml" filepath="$PROJECT_DIR$/UAV-Shop/UAV-Shop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UAV-Shop/UAV-Shop.iml" filepath="$PROJECT_DIR$/UAV-Shop/UAV-Shop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UAV-Shopping.iml" filepath="$PROJECT_DIR$/UAV-Shopping.iml" />
       <module fileurl="file://$PROJECT_DIR$/UAV-Shopping.iml" filepath="$PROJECT_DIR$/UAV-Shopping.iml" />
     </modules>
   </component>

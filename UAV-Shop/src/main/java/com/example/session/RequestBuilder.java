@@ -1,4 +1,4 @@
-package com.inszva.no0sdk;
+package com.example.session;
 
 import java.io.IOException;
 import java.io.OutputStream;
