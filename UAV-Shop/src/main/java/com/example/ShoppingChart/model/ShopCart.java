@@ -4,17 +4,22 @@ import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import com.example.session.ItemPair;
 
 
 public class ShopCart {
     private int shoppingAccount;//商品总数
     private double shoppingTotalPrice;//商品总价钱
     private Map<Dish,Integer> shoppingSingle;//单个物品的总价价钱
+    private List<ItemPair> list;
 
     public ShopCart(){
         this.shoppingAccount = 0;
         this.shoppingTotalPrice = 0;
         this.shoppingSingle = new HashMap<>();
+        this.list = new ArrayList<>();
     }
 
     public int getShoppingAccount() {
@@ -29,8 +34,10 @@ public class ShopCart {
         return shoppingSingle;
     }
 
+    public List<ItemPair> getItemList() {return list;}
+
     public boolean addShoppingSingle(Dish dish){
-        int remain = dish.getDishRemain();
+        long remain = dish.getDishRemain();
         if(remain<=0)
             return false;
         dish.setDishRemain(--remain);
@@ -44,6 +51,7 @@ public class ShopCart {
 
         shoppingTotalPrice += dish.getDishPrice();
         shoppingAccount++;
+        list.add(new ItemPair(dish.getDishID(),dish.getDishAmount()));
         return true;
     }
 
@@ -54,13 +62,14 @@ public class ShopCart {
         }
         if(num<=0) return false;
         num--;
-        int remain = dish.getDishRemain();
+        long remain = dish.getDishRemain();
         dish.setDishRemain(++remain);
         shoppingSingle.put(dish,num);
         if (num ==0) shoppingSingle.remove(dish);
 
         shoppingTotalPrice -= dish.getDishPrice();
         shoppingAccount--;
+        list.remove(new ItemPair(dish.getDishID(),dish.getDishAmount()));
         return true;
     }
 

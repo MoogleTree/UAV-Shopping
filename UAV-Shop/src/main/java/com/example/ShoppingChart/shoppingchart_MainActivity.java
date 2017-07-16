@@ -3,6 +3,7 @@ package com.example.ShoppingChart;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +15,15 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
+import android.view.inputmethod.InputMethod;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.MainMenu;
 import com.example.ShoppingChart.model.Dish;
 import com.example.ShoppingChart.model.DishMenu;
 import com.example.ShoppingChart.wiget.PointFTypeEvaluator;
@@ -33,6 +37,7 @@ import com.example.ShoppingChart.wiget.ShopCartDialog;
 import java.util.ArrayList;
 
 import com.example.R;
+import com.example.session.Session;
 
 
 public class shoppingchart_MainActivity extends AppCompatActivity implements LeftMenuAdapter.onItemSelectedListener,ShopCartImp,ShopCartDialog.ShopCartDialogImp{
@@ -55,14 +60,39 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
     private TextView totalPriceNumTextView;
     private RelativeLayout mainLayout;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shoppingchart_main);
+        final Session session = Session.getInstance();
 
         initData();
         initView();
         initAdapter();
+
+        Button commit_btn = (Button) findViewById(R.id.commit_btn);
+
+        commit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    session.createPayment(shopCart.getItemList(), new Session.CreatePaymentCallback(){
+                        @Override
+                        public void callback(boolean success, String reason){
+                            Intent intent = new Intent(shoppingchart_MainActivity.this, MainMenu.class);
+                            startActivity(intent);
+                        }
+                    });
+                } catch (Session.NullItemPairsException e) {
+                    e.printStackTrace();
+                } catch (Session.NotLoginException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void initView(){
@@ -143,41 +173,43 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
     private void initData(){
         shopCart = new ShopCart();
         dishMenuList = new ArrayList<>();
+        Session session = Session.getInstance();
+
         ArrayList<Dish> dishs1 = new ArrayList<>();
-        dishs1.add(new Dish("面包",1.0,10));
-        dishs1.add(new Dish("蛋挞",1.0,10));
-        dishs1.add(new Dish("牛奶",1.0,10));
-        dishs1.add(new Dish("肠粉",1.0,10));
-        dishs1.add(new Dish("绿茶饼",1.0,10));
-        dishs1.add(new Dish("花卷",1.0,10));
-        dishs1.add(new Dish("包子",1.0,10));
+        dishs1.add(new Dish("面包",1.0,10L,1L));
+        dishs1.add(new Dish("蛋挞",1.0,10L,2L));
+        dishs1.add(new Dish("牛奶",1.0,10L,3L));
+        dishs1.add(new Dish("肠粉",1.0,10L,4L));
+        dishs1.add(new Dish("绿茶饼",1.0,10L,5L));
+        dishs1.add(new Dish("花卷",1.0,10L,6L));
+        dishs1.add(new Dish("包子",1.0,10L,7L));
         DishMenu breakfast = new DishMenu("早点",dishs1);
 
         ArrayList<Dish> dishs2 = new ArrayList<>();
-        dishs2.add(new Dish("粥",1.0,10));
-        dishs2.add(new Dish("炒饭",1.0,10));
-        dishs2.add(new Dish("炒米粉",1.0,10));
-        dishs2.add(new Dish("炒粿条",1.0,10));
-        dishs2.add(new Dish("炒牛河",1.0,10));
-        dishs2.add(new Dish("炒菜",1.0,10));
+        dishs2.add(new Dish("粥",1.0,10L,8L));
+        dishs2.add(new Dish("炒饭",1.0,10L,9L));
+        dishs2.add(new Dish("炒米粉",1.0,10L,10L));
+        dishs2.add(new Dish("炒粿条",1.0,10L,11L));
+        dishs2.add(new Dish("炒牛河",1.0,10L,12L));
+        dishs2.add(new Dish("炒菜",1.0,10L,13L));
         DishMenu launch = new DishMenu("午餐",dishs2);
 
         ArrayList<Dish> dishs3 = new ArrayList<>();
-        dishs3.add(new Dish("淋菜",1.0,10));
-        dishs3.add(new Dish("川菜",1.0,10));
-        dishs3.add(new Dish("湘菜",1.0,10));
-        dishs3.add(new Dish("粤菜",1.0,10));
-        dishs3.add(new Dish("赣菜",1.0,10));
-        dishs3.add(new Dish("东北菜",1.0,10));
+        dishs3.add(new Dish("淋菜",1.0,10L,14L));
+        dishs3.add(new Dish("川菜",1.0,10L,15L));
+        dishs3.add(new Dish("湘菜",1.0,10L,16L));
+        dishs3.add(new Dish("粤菜",1.0,10L,17L));
+        dishs3.add(new Dish("赣菜",1.0,10L,18L));
+        dishs3.add(new Dish("东北菜",1.0,10L,19L));
         DishMenu evening = new DishMenu("晚餐",dishs3);
 
         ArrayList<Dish> dishs4 = new ArrayList<>();
-        dishs4.add(new Dish("淋菜",1.0,10));
-        dishs4.add(new Dish("川菜",1.0,10));
-        dishs4.add(new Dish("湘菜",1.0,10));
-        dishs4.add(new Dish("粤菜",1.0,10));
-        dishs4.add(new Dish("赣菜",1.0,10));
-        dishs4.add(new Dish("东北菜",1.0,10));
+        dishs4.add(new Dish("淋菜",1.0,10L,20L));
+        dishs4.add(new Dish("川菜",1.0,10L,21L));
+        dishs4.add(new Dish("湘菜",1.0,10L,22L));
+        dishs4.add(new Dish("粤菜",1.0,10L,23L));
+        dishs4.add(new Dish("赣菜",1.0,10L,24L));
+        dishs4.add(new Dish("东北菜",1.0,10L,25L));
         DishMenu menu1 = new DishMenu("晚餐",dishs3);
 
         dishMenuList.add(breakfast);
