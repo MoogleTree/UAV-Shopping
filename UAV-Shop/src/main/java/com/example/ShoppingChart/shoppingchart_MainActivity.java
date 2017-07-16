@@ -35,8 +35,12 @@ import com.example.ShoppingChart.wiget.FakeAddImageView;
 import com.example.ShoppingChart.wiget.ShopCartDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 import com.example.R;
+import com.example.session.Item;
 import com.example.session.Session;
 
 
@@ -131,6 +135,7 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
                 if(underView!=null && underView.getContentDescription()!=null ){
                     int position = Integer.parseInt(underView.getContentDescription().toString());
                     DishMenu menu = rightAdapter.getMenuOfMenuByPosition(position);
+                    if (menu == null || headMenu == null) return;
 
                     if(leftClickType || !menu.getMenuName().equals(headMenu.getMenuName())) {
                         if (dy> 0 && headerLayout.getTranslationY()<=1 && headerLayout.getTranslationY()>= -1 * headerLayout.getMeasuredHeight()*4/5 && !leftClickType) {// underView.getTop()>9
@@ -171,51 +176,31 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
     }
 
     private void initData(){
+
         shopCart = new ShopCart();
         dishMenuList = new ArrayList<>();
         Session session = Session.getInstance();
-
-        ArrayList<Dish> dishs1 = new ArrayList<>();
-        dishs1.add(new Dish("面包",1.0,10L,1L));
-        dishs1.add(new Dish("蛋挞",1.0,10L,2L));
-        dishs1.add(new Dish("牛奶",1.0,10L,3L));
-        dishs1.add(new Dish("肠粉",1.0,10L,4L));
-        dishs1.add(new Dish("绿茶饼",1.0,10L,5L));
-        dishs1.add(new Dish("花卷",1.0,10L,6L));
-        dishs1.add(new Dish("包子",1.0,10L,7L));
-        DishMenu breakfast = new DishMenu("早点",dishs1);
-
-        ArrayList<Dish> dishs2 = new ArrayList<>();
-        dishs2.add(new Dish("粥",1.0,10L,8L));
-        dishs2.add(new Dish("炒饭",1.0,10L,9L));
-        dishs2.add(new Dish("炒米粉",1.0,10L,10L));
-        dishs2.add(new Dish("炒粿条",1.0,10L,11L));
-        dishs2.add(new Dish("炒牛河",1.0,10L,12L));
-        dishs2.add(new Dish("炒菜",1.0,10L,13L));
-        DishMenu launch = new DishMenu("午餐",dishs2);
-
-        ArrayList<Dish> dishs3 = new ArrayList<>();
-        dishs3.add(new Dish("淋菜",1.0,10L,14L));
-        dishs3.add(new Dish("川菜",1.0,10L,15L));
-        dishs3.add(new Dish("湘菜",1.0,10L,16L));
-        dishs3.add(new Dish("粤菜",1.0,10L,17L));
-        dishs3.add(new Dish("赣菜",1.0,10L,18L));
-        dishs3.add(new Dish("东北菜",1.0,10L,19L));
-        DishMenu evening = new DishMenu("晚餐",dishs3);
-
-        ArrayList<Dish> dishs4 = new ArrayList<>();
-        dishs4.add(new Dish("淋菜",1.0,10L,20L));
-        dishs4.add(new Dish("川菜",1.0,10L,21L));
-        dishs4.add(new Dish("湘菜",1.0,10L,22L));
-        dishs4.add(new Dish("粤菜",1.0,10L,23L));
-        dishs4.add(new Dish("赣菜",1.0,10L,24L));
-        dishs4.add(new Dish("东北菜",1.0,10L,25L));
-        DishMenu menu1 = new DishMenu("晚餐",dishs3);
-
-        dishMenuList.add(breakfast);
-        dishMenuList.add(launch);
-        dishMenuList.add(evening);
-        dishMenuList.add(menu1);
+        session.getItemList(new Session.GetItemListCallback() {
+            @Override
+            public void callback(boolean success, String reason, List<Item> list) {
+                HashMap<String, ArrayList<Dish>> typeMap = new HashMap<String, ArrayList<Dish>>();
+                for (Item item : list) {
+                    ArrayList<Dish> arrayList = typeMap.get(item.itemType);
+                    if (arrayList == null) {
+                        arrayList = new ArrayList<Dish>();
+                        typeMap.put(item.itemType, arrayList);
+                    }
+                    arrayList.add(new Dish(item.itemName, item.itemPrice, item.itemId, item.itemImage));
+                }
+                Set<String> keys = typeMap.keySet();
+                for (String k : keys) {
+                    DishMenu dishMenu = new DishMenu(k, typeMap.get(k));
+                    dishMenuList.add(dishMenu);
+                }
+                leftAdapter.notifyDataSetChanged();
+                rightAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void initAdapter(){
@@ -230,6 +215,7 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
 
     private void initHeadView(){
         headMenu = rightAdapter.getMenuOfMenuByPosition(0);
+        if (headMenu == null) return;
         headerLayout.setContentDescription("0");
         headerView.setText(headMenu.getMenuName());
     }

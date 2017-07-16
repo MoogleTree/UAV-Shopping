@@ -5,20 +5,19 @@ public class Dish {
 
     private String dishName;
     private double dishPrice;
-    private Long dishAmount;
-    private Long dishRemain;
+    private Long dishAmount = 0L;
+    private Long dishRemain = 100000L;
     private Long dishID;
     private String itemDescription;
-    private String itemImagine;
+    private String dishImage;
 
-    public Dish(String dishName,double dishPrice,Long dishAmount, Long dishID
+    public Dish(String dishName,double dishPrice, Long dishID, String dishImage
                // String itemDescription, String itemImagine
     ){
         this.dishName = dishName;
         this.dishPrice = dishPrice;
-        this.dishAmount = dishAmount;
-        this.dishRemain = dishAmount;
         this.dishID=dishID;
+        this.dishImage = dishImage;
         //this.itemDescription=itemDescription;
         //this.itemImagine=itemImagine;
     }
@@ -42,6 +41,10 @@ public class Dish {
 
     public Long getDishAmount() {
         return dishAmount;
+    }
+
+    public String getDishImage() {
+        return dishImage;
     }
 
     public void setDishAmount(Long dishAmount) {

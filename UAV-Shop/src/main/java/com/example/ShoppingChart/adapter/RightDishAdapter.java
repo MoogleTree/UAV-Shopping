@@ -14,6 +14,7 @@ import com.example.ShoppingChart.model.DishMenu;
 import com.example.ShoppingChart.model.ShopCart;
 import com.example.R;
 import com.example.ShoppingChart.imp.ShopCartImp;
+import com.example.session.Session;
 
 import java.util.ArrayList;
 
@@ -32,11 +33,7 @@ public class RightDishAdapter extends RecyclerView.Adapter {
     public RightDishAdapter(Context mContext, ArrayList<DishMenu> mMenuList, ShopCart shopCart){
         this.mContext = mContext;
         this.mMenuList = mMenuList;
-        this.mItemCount = mMenuList.size();
         this.shopCart = shopCart;
-        for(DishMenu menu:mMenuList){
-            mItemCount+=menu.getDishList().size();
-        }
     }
 
     @Override
@@ -80,7 +77,8 @@ public class RightDishAdapter extends RecyclerView.Adapter {
                 dishholder.right_dish_name_tv.setText(dish.getDishName());
                 dishholder.right_dish_price_tv.setText(dish.getDishPrice()+"");
                 dishholder.right_dish_layout.setContentDescription(position+"");
-//                dishholder.itemImage.setImageResource(dish.getItemImagine());
+                Session.getInstance().asyncLoadImage(dishholder.right_dish_image, dish.getDishImage());
+//                dishholder.right_dish_image.setImageResource(dish.getItemImagine());
 //                dishholder.itemDescription.setText(dish.getItemDescription());
 
                 int count = 0;
@@ -158,7 +156,11 @@ public class RightDishAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mItemCount;
+        this.mItemCount = mMenuList.size();
+        for(DishMenu menu:mMenuList){
+            mItemCount+=menu.getDishList().size();
+        }
+        return this.mItemCount;
     }
 
     public ShopCartImp getShopCartImp() {
@@ -186,7 +188,7 @@ public class RightDishAdapter extends RecyclerView.Adapter {
         private ImageView right_dish_remove_iv;
         private ImageView right_dish_add_iv;
         private TextView right_dish_account_tv;
-        private ImageView itemImage;
+        private ImageView right_dish_image;
         private TextView itemDescription;
 
         public DishViewHolder(View itemView) {
@@ -197,7 +199,7 @@ public class RightDishAdapter extends RecyclerView.Adapter {
             right_dish_remove_iv = (ImageView)itemView.findViewById(R.id.right_dish_remove);
             right_dish_add_iv = (ImageView)itemView.findViewById(R.id.right_dish_add);
             right_dish_account_tv = (TextView) itemView.findViewById(R.id.right_dish_account);
-            itemImage = (ImageView) itemView.findViewById(R.id.right_dish_image);
+            right_dish_image = (ImageView) itemView.findViewById(R.id.right_dish_image);
             //itemDescription = (TextView) itemView.findViewById(R.id.item_dish_description);
         }
 

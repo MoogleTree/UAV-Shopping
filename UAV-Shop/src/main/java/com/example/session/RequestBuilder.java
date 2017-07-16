@@ -10,7 +10,7 @@ import java.net.URL;
  */
 
 public class RequestBuilder {
-    static HttpURLConnection newRequest(String url, String method, byte[] body) throws IOException {
+    public static HttpURLConnection newRequest(String url, String method, byte[] body) throws IOException {
         HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
         httpURLConnection.setRequestMethod(method);
         if (body != null) {

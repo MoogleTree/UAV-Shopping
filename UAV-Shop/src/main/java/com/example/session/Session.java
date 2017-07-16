@@ -1,12 +1,18 @@
 package com.example.session;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.JsonReader;
+import android.util.Pair;
+import android.widget.ImageView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -28,7 +34,7 @@ public class Session {
     private GetPaymentCallback getPaymentCallback = null;
     private CreatePaymentCallback createPaymentCallback = null;
 
-    static final private String API_ROOT = "http://10.180.186.184:2017/";
+    static final private String API_ROOT = "http://10.180.182.127:2017/";
     static final private int MSG_NO0_SDK = 0x45786145;
     static final private int MSG_LOGIN = 0;
     static final private int MSG_ITEM_LIST = 1;
@@ -36,6 +42,7 @@ public class Session {
     static final private int MSG_SET_BUTTON = 3;
     static final private int MSG_GET_PAYMENT = 4;
     static final private int MSG_CREATE_PAYMENT = 5;
+    static final private int MSG_SET_BITMAP = 6;
 
     public class NotLoginException extends Exception {
         NotLoginException() {
@@ -121,6 +128,10 @@ public class Session {
                         } else if (createPaymentCallback != null) {
                             createPaymentCallback.callback(true, null);
                         }
+                        break;
+                    case MSG_SET_BITMAP:
+                        Pair<ImageView, Bitmap> pair = (Pair<ImageView, Bitmap>)msg.obj;
+                        pair.first.setImageBitmap(pair.second);
                 }
             }
         };
@@ -216,6 +227,9 @@ public class Session {
                                     break;
                                 case "item_description":
                                     item.itemDescription = jsonReader.nextString();
+                                    break;
+                                case "item_type":
+                                    item.itemType = jsonReader.nextString();
                                     break;
                                 default:
                                     jsonReader.skipValue();
@@ -466,6 +480,30 @@ public class Session {
                     msg.what = MSG_NO0_SDK;
                     handler.sendMessage(msg);
                 } catch (java.io.IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void asyncLoadImage(final ImageView imageView, final String url) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HttpURLConnection httpURLConnection = RequestBuilder.newRequest(url , "GET", null);
+                    int code = httpURLConnection.getResponseCode();
+                    if (code != 200) return;
+                    InputStream is = httpURLConnection.getInputStream();
+                    Bitmap bmp = BitmapFactory.decodeStream(is);
+                    Message msg = new Message();
+                    msg.arg1 = MSG_SET_BITMAP;
+                    msg.what = MSG_NO0_SDK;
+                    msg.obj = new Pair<ImageView, Bitmap>(imageView, bmp);
+                    msg.arg2 = 0;
+                    handler.sendMessage(msg);
+                    is.close();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
