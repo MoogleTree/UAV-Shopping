@@ -7,16 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.MainMenu;
 import com.example.R;
-import com.example.session.ItemPair;
-import com.example.session.Item;
+import com.example.ShoppingChart.shoppingchart_MainActivity;
 import com.example.session.Session;
-
-import java.util.ArrayList;
-import java.util.List;
-
-
 
 
 public class ChooseBtn extends Activity {
@@ -111,7 +104,7 @@ public class ChooseBtn extends Activity {
                     session.setButton(itemIDs, new Session.SetButtonCallback() {
                         @Override
                         public void callback(boolean success, String reason) {
-                            Intent intent = new Intent(ChooseBtn.this, MainMenu.class);
+                            Intent intent = new Intent(ChooseBtn.this, shoppingchart_MainActivity.class);
                             startActivity(intent);
                         }
                     });

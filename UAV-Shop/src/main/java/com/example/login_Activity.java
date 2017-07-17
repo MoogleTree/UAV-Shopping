@@ -25,8 +25,7 @@ public class login_Activity extends AppCompatActivity {
                     session.login(1, new Session.LoginCallback(){
                         @Override
                         public void callback(boolean success, String reason) {
-                            Intent intent = new Intent(login_Activity.this, init.class);
-                            startActivity(intent);
+                            finish();
                         }
                     });
             }

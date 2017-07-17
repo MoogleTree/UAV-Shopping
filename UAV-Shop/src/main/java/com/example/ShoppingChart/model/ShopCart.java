@@ -6,13 +6,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import com.example.session.ItemPair;
 
 
 public class ShopCart {
     private int shoppingAccount;//商品总数
     private double shoppingTotalPrice;//商品总价钱
-    private Map<Dish,Integer> shoppingSingle;//单个物品的总价价钱
+    private HashMap<Dish,Integer> shoppingSingle;//每种物品的数量
     private List<ItemPair> list;
 
     public ShopCart(){
@@ -34,7 +36,14 @@ public class ShopCart {
         return shoppingSingle;
     }
 
-    public List<ItemPair> getItemList() {return list;}
+    public List<ItemPair> getItemList() {
+        list.clear();
+        Set<Dish> dishes = shoppingSingle.keySet();
+        for (Dish dish : dishes) {
+            list.add(new ItemPair(dish.getDishID(), new Long(shoppingSingle.get(dish))));
+        }
+        return list;
+    }
 
     public boolean addShoppingSingle(Dish dish){
         long remain = dish.getDishRemain();
@@ -51,7 +60,6 @@ public class ShopCart {
 
         shoppingTotalPrice += dish.getDishPrice();
         shoppingAccount++;
-        list.add(new ItemPair(dish.getDishID(),dish.getDishAmount()));
         return true;
     }
 
@@ -69,7 +77,6 @@ public class ShopCart {
 
         shoppingTotalPrice -= dish.getDishPrice();
         shoppingAccount--;
-        list.remove(new ItemPair(dish.getDishID(),dish.getDishAmount()));
         return true;
     }
 

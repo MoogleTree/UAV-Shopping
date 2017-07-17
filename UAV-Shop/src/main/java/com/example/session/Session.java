@@ -34,7 +34,7 @@ public class Session {
     private GetPaymentCallback getPaymentCallback = null;
     private CreatePaymentCallback createPaymentCallback = null;
 
-    static final private String API_ROOT = "http://10.180.182.127:2017/";
+    static final private String API_ROOT = "http://10.180.154.235:2017/";
     static final private int MSG_NO0_SDK = 0x45786145;
     static final private int MSG_LOGIN = 0;
     static final private int MSG_ITEM_LIST = 1;
@@ -58,6 +58,10 @@ public class Session {
 
     public class NullItemPairsException extends Exception {
         NullItemPairsException() {super("Null Item pairs!"); }
+    }
+
+    public boolean logined() {
+        return userId != -1;
     }
 
     static public Session getInstance() {

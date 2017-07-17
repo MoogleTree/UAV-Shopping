@@ -1,24 +1,26 @@
-package com.example.ShoppingChart;
+package com.example;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.PointF;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Fragment;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
@@ -29,30 +31,26 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.PaymentActivity;
-import com.example.PullService;
-import com.example.ShoppingChart.model.Dish;
-import com.example.ShoppingChart.model.DishMenu;
-import com.example.ShoppingChart.wiget.PointFTypeEvaluator;
 import com.example.ShoppingChart.adapter.LeftMenuAdapter;
 import com.example.ShoppingChart.adapter.RightDishAdapter;
 import com.example.ShoppingChart.imp.ShopCartImp;
+import com.example.ShoppingChart.model.Dish;
+import com.example.ShoppingChart.model.DishMenu;
 import com.example.ShoppingChart.model.ShopCart;
+import com.example.ShoppingChart.shoppingchart_MainActivity;
 import com.example.ShoppingChart.wiget.FakeAddImageView;
+import com.example.ShoppingChart.wiget.PointFTypeEvaluator;
 import com.example.ShoppingChart.wiget.ShopCartDialog;
+import com.example.session.Item;
+import com.example.session.ItemPair;
+import com.example.session.Session;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import com.example.R;
-import com.example.session.Item;
-import com.example.session.ItemPair;
-import com.example.session.Session;
-
-
-public class shoppingchart_MainActivity extends AppCompatActivity implements LeftMenuAdapter.onItemSelectedListener,ShopCartImp,ShopCartDialog.ShopCartDialogImp{
+public class ShopFragment extends Fragment implements LeftMenuAdapter.onItemSelectedListener,ShopCartImp,ShopCartDialog.ShopCartDialogImp {
     private final static String TAG = "ChooseBtn";
     private RecyclerView leftMenu;//左侧菜单栏
     private RecyclerView rightMenu;//右侧菜单栏
@@ -65,82 +63,39 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
     private ArrayList<DishMenu> dishMenuList;//数据源
     private boolean leftClickType = false;//左侧菜单点击引发的右侧联动
     private ShopCart shopCart;
-//    private FakeAddImageView fakeAddImageView;
+    //    private FakeAddImageView fakeAddImageView;
     private ImageView shoppingCartView;
     private FrameLayout shopingCartLayout;
     private TextView totalPriceTextView;
     private TextView totalPriceNumTextView;
     private RelativeLayout mainLayout;
 
-    public class MyReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle=intent.getExtras();
-            show(bundle.getString("data"));
-        }
+    public ShopFragment() {
+        // Required empty public constructor
     }
-
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.shoppingchart_main);
         final Session session = Session.getInstance();
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putInt("userId", 1);
-        intent.putExtras(bundle);
-        intent.setClass(this, PullService.class);
-        Log.v("Service1", "1234");
-        startService(intent);
 
-        BroadcastReceiver receiver=new MyReceiver();
-        IntentFilter filter=new IntentFilter();
-        filter.addAction("com.example.PullService");
-        shoppingchart_MainActivity.this.registerReceiver(receiver,filter);
-
-        initData();
-        initView();
-        initAdapter();
-
-        Button commit_btn = (Button) findViewById(R.id.commit_btn);
-
-        commit_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    List<ItemPair> list = shopCart.getItemList();
-                    session.createPayment(shopCart.getItemList(), new Session.CreatePaymentCallback(){
-                        @Override
-                        public void callback(boolean success, String reason){
-                            Intent intent = new Intent(shoppingchart_MainActivity.this, PaymentActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                } catch (Session.NullItemPairsException e) {
-                    e.printStackTrace();
-                } catch (Session.NotLoginException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
-    private void initView(){
-        mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
-        leftMenu = (RecyclerView)findViewById(R.id.left_menu);
-        rightMenu = (RecyclerView)findViewById(R.id.right_menu);
-        headerView = (TextView)findViewById(R.id.right_menu_tv);
-        headerLayout = (LinearLayout)findViewById(R.id.right_menu_item);
+    private void initView(View view) {
+        mainLayout = (RelativeLayout)view.findViewById(R.id.main_layout);
+        leftMenu = (RecyclerView)view.findViewById(R.id.left_menu);
+        rightMenu = (RecyclerView)view.findViewById(R.id.right_menu);
+        headerView = (TextView)view.findViewById(R.id.right_menu_tv);
+        headerLayout = (LinearLayout)view.findViewById(R.id.right_menu_item);
 //        fakeAddImageView = (FakeAddImageView)findViewById(R.id.right_dish_fake_add);
-        bottomLayout = (LinearLayout)findViewById(R.id.shopping_cart_bottom);
-        shoppingCartView = (ImageView) findViewById(R.id.shopping_cart);
-        shopingCartLayout = (FrameLayout) findViewById(R.id.shopping_cart_layout);
-        totalPriceTextView = (TextView)findViewById(R.id.shopping_cart_total_tv);
-        totalPriceNumTextView = (TextView)findViewById(R.id.shopping_cart_total_num);
+        bottomLayout = (LinearLayout)view.findViewById(R.id.shopping_cart_bottom);
+        shoppingCartView = (ImageView)view.findViewById(R.id.shopping_cart);
+        shopingCartLayout = (FrameLayout) view.findViewById(R.id.shopping_cart_layout);
+        totalPriceTextView = (TextView)view.findViewById(R.id.shopping_cart_total_tv);
+        totalPriceNumTextView = (TextView)view.findViewById(R.id.shopping_cart_total_num);
 
-        leftMenu.setLayoutManager(new LinearLayoutManager(this));
-        rightMenu.setLayoutManager(new LinearLayoutManager(this));
+        leftMenu.setLayoutManager(new LinearLayoutManager(this.getActivity().getBaseContext()));
+        rightMenu.setLayoutManager(new LinearLayoutManager(this.getActivity().getBaseContext()));
 
         rightMenu.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -202,6 +157,44 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
         });
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.shoppingchart_main, container, false);
+
+        final Session session = Session.getInstance();
+        initData();
+        initView(view);
+        initAdapter();
+
+        Button commit_btn = (Button) view.findViewById(R.id.commit_btn);
+
+        commit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    List<ItemPair> list = shopCart.getItemList();
+                    session.createPayment(shopCart.getItemList(), new Session.CreatePaymentCallback(){
+                        @Override
+                        public void callback(boolean success, String reason){
+                            FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+                            Fragment fragment = FragmentFactory.getInstanceByIndex(2);
+                            transaction.replace(R.id.content, fragment);
+                            transaction.commit();
+                        }
+                    });
+                } catch (Session.NullItemPairsException e) {
+                    e.printStackTrace();
+                } catch (Session.NotLoginException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        return view;
+    }
+
     private void initData(){
 
         shopCart = new ShopCart();
@@ -231,8 +224,8 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
     }
 
     private void initAdapter(){
-        leftAdapter = new LeftMenuAdapter(this,dishMenuList);
-        rightAdapter = new RightDishAdapter(this,dishMenuList,shopCart);
+        leftAdapter = new LeftMenuAdapter(this.getActivity().getBaseContext(),dishMenuList);
+        rightAdapter = new RightDishAdapter(this.getActivity().getBaseContext(),dishMenuList,shopCart);
         rightMenu.setAdapter(rightAdapter);
         leftMenu.setAdapter(leftAdapter);
         leftAdapter.addItemSelectedListener(this);
@@ -245,12 +238,6 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
         if (headMenu == null) return;
         headerLayout.setContentDescription("0");
         headerView.setText(headMenu.getMenuName());
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        leftAdapter.removeItemSelectedListener(this);
     }
 
     private void showHeadView(){
@@ -301,7 +288,7 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
         controlP.x = endP.x;
         controlP.y = startP.y;
 
-        final FakeAddImageView fakeAddImageView = new FakeAddImageView(this);
+        final FakeAddImageView fakeAddImageView = new FakeAddImageView(getActivity());
         mainLayout.addView(fakeAddImageView);
         fakeAddImageView.setImageResource(R.drawable.ic_add_circle_blue_700_36dp);
         fakeAddImageView.getLayoutParams().width = getResources().getDimensionPixelSize(R.dimen.item_dish_circle_size);
@@ -364,7 +351,7 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
 
     private void showCart(View view) {
         if(shopCart!=null && shopCart.getShoppingAccount()>0){
-            ShopCartDialog dialog = new ShopCartDialog(this,shopCart,R.style.cartdialog);
+            ShopCartDialog dialog = new ShopCartDialog(getActivity(),shopCart,R.style.cartdialog);
             Window window = dialog.getWindow();
             dialog.setShopCartDialogImp(this);
             dialog.setCanceledOnTouchOutside(true);
@@ -385,21 +372,4 @@ public class shoppingchart_MainActivity extends AppCompatActivity implements Lef
         rightAdapter.notifyDataSetChanged();
     }
 
-    private int s2meteor = 0;
-
-    private void show(String data) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(android.R.drawable.sym_def_app_icon);
-        builder.setTicker("S2Meteor");
-        builder.setContentTitle(data);
-        builder.setContentText("点击进入app查看详细内容");
-        builder.setWhen(System.currentTimeMillis());
-        Notification note = builder.build();
-        NotificationManager mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent intent=new Intent(this,PaymentActivity.class);
-        PendingIntent pendingIntent= PendingIntent.getActivity(this, 0, intent, 0);
-        builder.setContentIntent(pendingIntent);//点击后的意图
-        note.defaults = Notification.DEFAULT_ALL;
-        mgr.notify(s2meteor++, note);
-    }
 }
