@@ -40,15 +40,15 @@
 
 
             <TextView
-                android:id="@+id/lblAbout"
+                android:id="@+id/lblSetButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
                 android:layout_weight="0.02"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="关于我们"
+                android:text="设置按钮"
                 android:textAlignment="center"
                 android:textSize="24dp" />
 
@@ -56,8 +56,8 @@
                 android:id="@+id/lblSetPin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
                 android:layout_weight="0.02"
                 android:ems="10"
                 android:inputType="textPersonName"
@@ -66,15 +66,15 @@
                 android:textSize="24dp" />
 
             <TextView
-                android:id="@+id/lblExit"
+                android:id="@+id/lblAbout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
                 android:layout_weight="0.02"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="退出"
+                android:text="关于我们"
                 android:textAlignment="center"
                 android:textSize="24dp" />
 
@@ -82,8 +82,8 @@
                 android:id="@+id/lblReback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
                 android:layout_weight="0.02"
                 android:ems="10"
                 android:inputType="textPersonName"
@@ -92,15 +92,15 @@
                 android:textSize="24dp" />
 
             <TextView
-                android:id="@+id/lblSetButton"
+                android:id="@+id/lblExit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
                 android:layout_weight="0.02"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="设置按钮"
+                android:text="退出"
                 android:textAlignment="center"
                 android:textSize="24dp" />
         </LinearLayout>
